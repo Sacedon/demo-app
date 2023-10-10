@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\EmailController;
+use App\Http\Controllers\BookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,11 +21,11 @@ Route::get('/register', [AuthController::class, 'registerForm' ]);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::get('/dashboard', [AuthController::class, 'index'])->middleware('auth.dashboard', 'guest')->name('dashboard');
 
 
 
-Route::get('/sendmail', [EmailController::class, 'sendEmail']);
+
+Route::resource('books', BookController::class)->middleware('auth.dashboard', 'guest');
 
 Route::get('verification/{user}/{token}', [AuthController::class, 'verification']);
 

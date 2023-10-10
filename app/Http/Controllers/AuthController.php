@@ -6,6 +6,7 @@ use App\Jobs\CustomerJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Book;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,14 +14,14 @@ class AuthController extends Controller
 {
     public function loginForm() {
         if (auth()->check()) {
-            return redirect()->route('dashboard'); // Redirect authenticated users to the dashboard
+            return redirect()->route('books.index'); // Redirect authenticated users to the dashboard
         }
         return view('auth.login');
     }
 
     public function registerForm() {
         if (auth()->check()) {
-            return redirect()->route('dashboard'); // Redirect authenticated users to the dashboard
+            return redirect()->route('books.index'); // Redirect authenticated users to the dashboard
         }
 
         return view('auth.register');
@@ -48,7 +49,7 @@ class AuthController extends Controller
             return back()->with('error', 'Invalid Credentials.');
         }
 
-        return redirect('/dashboard');
+        return redirect('books.index');
         // $credentials = $request->only('email', 'password');
         // if (Auth::attempt($credentials)) {
         //     if (Auth::user()->email_verified_at) {
@@ -64,8 +65,9 @@ class AuthController extends Controller
 
     public function index()
     {
+
         if (Auth::check()) {
-            return view('dashboard');
+            return view('books.index');
         }
 
         return redirect()->route('loginForm');
