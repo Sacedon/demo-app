@@ -33,7 +33,7 @@
             <label for="published_year">Published Year</label>
             <input type="number" class="form-control" id="published_year" name="published_year" value="{{ $book->published_year }}" required>
         </div>
-        <button type="submit" class="btn btn-primary">Update Book</button>
+        <button type="submit" class="btn btn-primary mt-3">Update Book</button>
     </form>
 </div>
 @endsection

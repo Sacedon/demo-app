@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('author');
             $table->integer('published_year');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

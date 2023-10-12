@@ -37,41 +37,24 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || $user->email_verified_at == null) {
-            return redirect('/')->with('error', 'Sorry your account is not yet verified.');
+            return redirect('/')->with('error', 'Sorry, your account is not yet verified.');
         }
 
-        $login = auth()->attempt([
+        if (Auth::attempt([
             'email' => $request->email,
             'password' => $request->password
-        ]);
-
-        if (!$login) {
-            return back()->with('error', 'Invalid Credentials.');
+        ])) {
+            if (Auth::user()->email_verified_at) {
+                return redirect()->route('books.index');
+            } else {
+                Auth::logout();
+                return redirect()->route('loginForm')->with('error', 'Email not verified. Please check your email for verification instructions.');
+            }
         }
 
-        return redirect('books.index');
-        // $credentials = $request->only('email', 'password');
-        // if (Auth::attempt($credentials)) {
-        //     if (Auth::user()->email_verified_at) {
-        //         return view('dashboard');
-        //     } else {
-        //         Auth::logout();
-        //         return redirect()->route('loginForm')->with('error', 'Email not verified. Please check your email for verification instructions.');
-        //     }
-        // }
-
-        // return redirect()->route('loginForm')->with('error', 'Invalid credentials');
+        return redirect()->route('loginForm')->with('error', 'Invalid credentials');
     }
 
-    public function index()
-    {
-
-        if (Auth::check()) {
-            return view('books.index');
-        }
-
-        return redirect()->route('loginForm');
-    }
 
     public function register(Request $request) {
         $request->validate([
