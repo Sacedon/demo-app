@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Events\UserLog;
 
 class BookController extends Controller
 {
@@ -21,39 +21,24 @@ class BookController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required',
-        'description' => 'required',
-        'author' => 'required',
-        'published_year' => 'required|integer',
-    ]);
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'author' => 'required',
+            'published_year' => 'required|integer',
+        ]);
 
-    $book = new Book([
-        'title' => $request->input('title'),
-        'description' => $request->input('description'),
-        'author' => $request->input('author'),
-        'published_year' => $request->input('published_year'),
-    ]);
-
-    if (Auth::check()) {
-        $book->user_id = Auth::id();
-    } else {
-        // Handle the case when the user is not authenticated
-        // You can redirect to a login page or display an error message
-        return redirect()->route('loginForm')->with('error', 'Please log in to add a book.');
+        $book = Book::create($request->all());
+        $log_entry = Auth::user()->name . " added a book ". $book->name . " with the id# ". $book->id;
+        event(new UserLog($log_entry));
+        return redirect()->route('books.index')->with('success', 'Book created successfully');
     }
 
-    $book->save();
-
-    return redirect()->route('books.index')->with('success', 'Book created successfully');
-}
-
-public function show(Book $book)
-{
-    return view('books.show', compact('book'));
-}
-
+    public function show(Book $book)
+    {
+        return view('books.show', compact('book'));
+    }
 
     public function edit(Book $book)
     {

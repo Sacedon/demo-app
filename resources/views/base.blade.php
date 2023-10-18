@@ -21,6 +21,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('books.index') }}">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('book-logs') }}">Logs</a>
+                    </li>
 
                     @if(auth()->check())
                     <li class="nav-item">
