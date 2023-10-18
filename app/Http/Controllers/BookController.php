@@ -46,23 +46,30 @@ class BookController extends Controller
     }
 
     public function update(Request $request, Book $book)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'author' => 'required',
-            'published_year' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'author' => 'required',
+        'published_year' => 'required|integer',
+    ]);
 
-        $book->update($request->all());
+    $data = $request->only(['title', 'description', 'author', 'published_year']);
+    $book->update($data);
 
-        return redirect()->route('books.index')
-            ->with('success', 'Book updated successfully');
-    }
+    $log_entry = Auth::user()->name . " updated a book " . $book->title . " with the id# " . $book->id;
+    event(new UserLog($log_entry));
+
+    return redirect()->route('books.index')
+        ->with('success', 'Book updated successfully');
+}
+
 
     public function destroy(Book $book)
     {
         $book->delete();
+        $log_entry = Auth::user()->name . " deleted an book ". $book->name . " with the id# ". $book->id;
+        event(new UserLog($log_entry));
 
         return redirect()->route('books.index')
             ->with('success', 'Book deleted successfully');

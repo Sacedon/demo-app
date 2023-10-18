@@ -14,7 +14,8 @@ class LogController extends Controller
 
         // Format the created_at timestamps
         $logEntries->transform(function ($logEntry) {
-            $logEntry->formattedCreatedAt = Carbon::parse($logEntry->created_at)->format('F-d-Y');
+            $logEntry->formattedCreatedAt = Carbon::parse($logEntry->created_at)->timezone('Asia/Manila')
+            ->format('F d, Y g:i A');
             return $logEntry;
         });
 
