@@ -9,10 +9,20 @@ use App\Models\User;
 class Book extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'author', 'published_year', 'user_id'];
+    protected $fillable = ['title', 'description', 'author', 'published_year', 'user_id', 'status'];
 
     public function user()
 {
     return $this->belongsTo(User::class);
 }
+
+public function borrows()
+    {
+        return $this->hasMany(Borrow::class);
+    }
+
+    public function isAvailable()
+    {
+        return $this->status === 'available';
+    }
 }

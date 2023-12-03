@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('borrows', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('author');
-            $table->integer('published_year');
-            $table->enum('status', ['available', 'borrowed'])->default('available');
+            $table->foreignId('user_id')->constrained(); // Assuming a foreign key relationship with users
+            $table->foreignId('book_id')->constrained();
+            $table->date('return_date');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('borrows');
     }
 };

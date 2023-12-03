@@ -38,6 +38,9 @@
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
                         </form>
                     </td>
+                    <td>
+                        <a href="{{ route('books.borrow.form', $book->id) }}" class="btn btn-warning btn-sm">Borrow</a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

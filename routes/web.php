@@ -32,6 +32,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
      Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
      Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
      Route::get('/book-logs', [LogController::class, 'index'])->middleware('auth.dashboard', 'guest')->name('book-logs');
+     Route::get('/books/{id}/borrow', [BookController::class, 'showBorrowForm'])->name('books.borrow.form');
+     Route::post('/books/{id}/borrow', [BookController::class, 'borrow'])->name('books.borrow');
 
 
 

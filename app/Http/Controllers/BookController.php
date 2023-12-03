@@ -6,6 +6,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\UserLog;
+use App\Models\Borrow;
 
 class BookController extends Controller
 {
@@ -73,5 +74,35 @@ class BookController extends Controller
 
         return redirect()->route('books.index')
             ->with('success', 'Book deleted successfully');
+    }
+
+    public function showBorrowForm($id)
+    {
+        $book = Book::findOrFail($id);
+        return view('books.borrow', compact('book'));
+    }
+
+    public function borrow(Request $request, $id)
+    {
+        $request->validate([
+            'return_date' => 'required|date|after:today',
+        ]);
+
+        $book = Book::findOrFail($id);
+
+        if (!$book->isAvailable()) {
+            return redirect()->route('books.index', $book->id)->with('error', 'This book is not available for borrowing.');
+        }
+
+        $borrow = new Borrow();
+        $borrow->user_id = auth()->id();
+        $borrow->book_id = $book->id;
+        $borrow->return_date = $request->input('return_date');
+        $borrow->save();
+
+        // Update book availability status
+        $book->update(['status' => 'borrowed']);
+
+        return redirect()->route('books.index')->with('status', 'Book borrowed successfully!');
     }
 }
