@@ -18,6 +18,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto"> <!-- Use "mr-auto" to move content to the left -->
+
+
+                    @if(auth()->check())
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('books.index') }}">Home</a>
                     </li>
@@ -27,14 +30,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('book-logs') }}">Logs</a>
                     </li>
-
-                    @if(auth()->check())
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-link nav-link">Logout</button>
                         </form>
                     </li>
+
                     @else
                     <li class="nav-item">
                         <a class="nav-link" href="{{ ('/') }}">Login</a>

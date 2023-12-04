@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Notifications\BorrowAccepted;
+use App\Notifications\BorrowRejected;
 use App\Models\Borrow;
 
 class BorrowController extends Controller
@@ -28,6 +30,8 @@ class BorrowController extends Controller
         $book = Book::findOrFail($borrow->book_id);
         $book->update(['status' => 'borrowed']);
 
+        $borrow->user->notify(new BorrowAccepted($borrow));
+
         return redirect()->route('borrows.index')->with('status', 'Borrow request accepted.');
     }
 
@@ -39,6 +43,8 @@ class BorrowController extends Controller
         // Update the book status to 'available' when the request is rejected
         $book = Book::findOrFail($borrow->book_id);
         $book->update(['status' => 'available']);
+
+        $borrow->user->notify(new BorrowRejected($borrow));
 
         return redirect()->route('borrows.index')->with('status', 'Borrow request rejected.');
     }
