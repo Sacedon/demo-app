@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Book;
 
 class Borrow extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'book_id', 'return_date'];
+    protected $fillable = ['user_id', 'book_id', 'return_date', 'borrow_status'];
 
     public function user()
     {

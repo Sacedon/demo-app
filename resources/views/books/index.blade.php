@@ -12,6 +12,12 @@
         </div>
     @endif
 
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -37,9 +43,6 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?')">Delete</button>
                         </form>
-                    </td>
-                    <td>
-                        <a href="{{ route('books.borrow.form', $book->id) }}" class="btn btn-warning btn-sm">Borrow</a>
                     </td>
                 </tr>
             @endforeach

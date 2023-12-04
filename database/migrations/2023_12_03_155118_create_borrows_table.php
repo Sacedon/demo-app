@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained(); // Assuming a foreign key relationship with users
             $table->foreignId('book_id')->constrained();
             $table->date('return_date');
+            $table->enum('borrow_status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

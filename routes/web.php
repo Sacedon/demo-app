@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\BorrowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
      Route::get('/book-logs', [LogController::class, 'index'])->middleware('auth.dashboard', 'guest')->name('book-logs');
      Route::get('/books/{id}/borrow', [BookController::class, 'showBorrowForm'])->name('books.borrow.form');
      Route::post('/books/{id}/borrow', [BookController::class, 'borrow'])->name('books.borrow');
+
+     Route::resource('borrows', BorrowController::class);
+     Route::patch('/borrows/{borrow}/accept', [BorrowController::class, 'accept'])->name('borrows.accept');
+Route::patch('/borrows/{borrow}/reject', [BorrowController::class, 'reject'])->name('borrows.reject');
 
 
 

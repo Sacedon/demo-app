@@ -22,6 +22,9 @@
                         <a class="nav-link" href="{{ route('books.index') }}">Home</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('borrows.index') }}">Borrowed Books</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('book-logs') }}">Logs</a>
                     </li>
 
