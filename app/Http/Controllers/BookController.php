@@ -8,6 +8,7 @@ use App\Models\Borrow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\BookBorrowed;
 
 class BookController extends Controller
 {
@@ -41,7 +42,7 @@ class BookController extends Controller
 
         $book = Book::create($data);
 
-        $log_entry = Auth::user()->name . " added a book " . $book->title . " with the id# " . $book->id;
+        $log_entry = Auth::user()->name . " added a book " . $book->title;
         event(new UserLog($log_entry));
 
         return redirect()->route('books.index')->with('success', 'Book created successfully');
@@ -86,7 +87,7 @@ class BookController extends Controller
 
     $book->update($data);
 
-    $log_entry = Auth::user()->name . " updated a book " . $book->title . " with the id# " . $book->id;
+    $log_entry = Auth::user()->name . " updated a book " . $book->title;
     event(new UserLog($log_entry));
 
     return redirect()->route('books.index')->with('success', 'Book updated successfully');
@@ -96,7 +97,7 @@ class BookController extends Controller
     {
         $book->borrows()->delete();
         $book->delete();
-        $log_entry = Auth::user()->name . " deleted a book " . $book->title . " with the id# " . $book->id;
+        $log_entry = Auth::user()->name . " deleted a book " . $book->title;
         event(new UserLog($log_entry));
 
         return redirect()->route('books.index')->with('success', 'Book deleted successfully');
@@ -141,6 +142,8 @@ class BookController extends Controller
 
                 // Update book availability status
                 $book->update(['status' => 'borrowed']);
+
+                auth()->user()->notify(new BookBorrowed($book));
 
                 return redirect()->route('books.index')->with('status', 'Book Requested successfully!');
             } else {
