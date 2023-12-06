@@ -35,6 +35,10 @@
                         <a class="nav-link" href="{{ route('book-logs') }}">Logs</a>
                     </li>
                     @endrole
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('chatify') }}">Chat Messenger</a>
+                    </li>
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
