@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('books.update', $book->id) }}" method="POST">
+    <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT') <!-- Use PUT method for updating -->
         <div class="form-group">
@@ -32,6 +32,10 @@
         <div class="form-group">
             <label for="published_year">Published Year</label>
             <input type="number" class="form-control" id="published_year" name="published_year" value="{{ $book->published_year }}" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Book Cover Image</label>
+            <input type="file" class="form-control" id="image" name="image">
         </div>
         <button type="submit" class="btn btn-primary mt-3">Update Book</button>
     </form>

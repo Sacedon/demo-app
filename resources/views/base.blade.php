@@ -24,12 +24,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('books.index') }}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('borrows.index') }}">Borrowed Books</a>
-                    </li>
+                    @role('admin')
+        <!-- Show the "Borrowed Books" link only for admin users -->
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('borrows.index') }}">Borrowed Books</a>
+        </li>
+        @endrole
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('book-logs') }}">Logs</a>
                     </li>
+
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="post">
                             @csrf

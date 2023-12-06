@@ -10,7 +10,7 @@ use App\Models\User;
 class Book extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'description', 'author', 'published_year', 'user_id', 'status'];
+    protected $fillable = ['image_path', 'title', 'description', 'author', 'published_year', 'user_id', 'status'];
 
     public function user()
 {

@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Borrow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -28,11 +29,21 @@ class BookController extends Controller
             'description' => 'required',
             'author' => 'required',
             'published_year' => 'required|integer',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add image validation rules
         ]);
 
-        $book = Book::create($request->all());
+        $data = $request->except('image');
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('book_covers', 'public');
+            $data['image_path'] = $imagePath;
+        }
+
+        $book = Book::create($data);
+
         $log_entry = Auth::user()->name . " added a book " . $book->title . " with the id# " . $book->id;
         event(new UserLog($log_entry));
+
         return redirect()->route('books.index')->with('success', 'Book created successfully');
     }
 
@@ -50,22 +61,36 @@ class BookController extends Controller
     }
 
     public function update(Request $request, Book $book)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'author' => 'required',
-            'published_year' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'author' => 'required',
+        'published_year' => 'required|integer',
+        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add image validation rules
+    ]);
 
-        $data = $request->only(['title', 'description', 'author', 'published_year']);
-        $book->update($data);
+    $data = $request->only(['title', 'description', 'author', 'published_year']);
 
-        $log_entry = Auth::user()->name . " updated a book " . $book->title . " with the id# " . $book->id;
-        event(new UserLog($log_entry));
+    // Check if a new image is provided
+    if ($request->hasFile('image')) {
+        // Delete the old image
+        if ($book->image_path) {
+            Storage::disk('public')->delete($book->image_path);
+        }
 
-        return redirect()->route('books.index')->with('success', 'Book updated successfully');
+        // Upload the new image
+        $imagePath = $request->file('image')->store('book_covers', 'public');
+        $data['image_path'] = $imagePath;
     }
+
+    $book->update($data);
+
+    $log_entry = Auth::user()->name . " updated a book " . $book->title . " with the id# " . $book->id;
+    event(new UserLog($log_entry));
+
+    return redirect()->route('books.index')->with('success', 'Book updated successfully');
+}
 
     public function destroy(Book $book)
     {

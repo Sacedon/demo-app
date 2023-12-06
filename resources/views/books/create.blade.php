@@ -14,7 +14,7 @@
         </div>
     @endif
 
-    <form action="{{ route('books.store') }}" method="POST">
+    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="title">Title</label>
@@ -31,6 +31,10 @@
         <div class="form-group">
             <label for="published_year">Published Year</label>
             <input type="number" class="form-control" id="published_year" name="published_year" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Book Cover Image</label>
+            <input type="file" class="form-control" id="image" name="image">
         </div>
         <button type="submit" class="btn btn-primary mt-3">Create Book</button>
     </form>

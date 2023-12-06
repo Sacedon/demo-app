@@ -36,7 +36,7 @@ class BorrowAccepted extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -67,4 +67,5 @@ class BorrowAccepted extends Notification
             'return_date' => $this->borrow->return_date,
         ];
     }
+
 }

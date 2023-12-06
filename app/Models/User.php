@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use App\Models\Book;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -50,4 +51,14 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     return $this->hasMany(Book::class);
 }
+
+public function notifications()
+{
+    return $this->hasMany(Notification::class);
+}
+
+public function unreadNotifications()
+    {
+        return $this->notifications()->where('read_at', null);
+    }
 }
